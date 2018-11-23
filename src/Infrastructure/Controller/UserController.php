@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Controller;
 
 use App\Domain\CommandResolver;
+use App\Domain\User\Command\ChangeUserEmail;
 use App\Domain\User\Command\RegisterUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

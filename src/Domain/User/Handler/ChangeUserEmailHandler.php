@@ -20,6 +20,7 @@ class ChangeUserEmailHandler
     public function __invoke(ChangeUserEmail $changeUserEmail)
     {
         $userId = new UserId($changeUserEmail->getUuid());
+        
         $user = $this->userRepository->get($userId);
         $user->changeEmail($userId, $changeUserEmail->getEmail());
 
