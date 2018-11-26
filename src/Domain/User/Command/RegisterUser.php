@@ -21,8 +21,7 @@ class RegisterUser extends CreateUserCommand
      *             @Assert\NotBlank,
      *             @Assert\Length(min=3)
      *         }
-     *     },
-     *     allowMissingFields = true
+     *     }
      * )
      */
     private $payload;

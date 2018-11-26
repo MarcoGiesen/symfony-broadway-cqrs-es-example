@@ -30,13 +30,15 @@ class UserController
      */
     public function registerAction(Request $request): JsonResponse
     {
+        /** @var RegisterUser $registerUser */
         $registerUser = $this->resolver->resolve($request, RegisterUser::class);
 
         $this->bus->dispatch($registerUser);
 
         return new JsonResponse([
             'status' => 'success',
-            'message' => 'ok'
+            'message' => 'ok',
+            'id' => (string)$registerUser->getUserId()
         ]);
     }
 

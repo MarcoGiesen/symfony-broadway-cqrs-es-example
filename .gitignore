@@ -14,3 +14,4 @@
 ###< symfony/phpunit-bridge ###
 
 /cqrs-es.sqlite
+/cqrs-es.sqlite3
