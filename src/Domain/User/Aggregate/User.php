@@ -50,7 +50,7 @@ class User extends EventSourcedAggregateRoot
     public function changeEmail(UserId $userId, string $email): void
     {
         $this->apply(
-            new UserWasRegistered(
+            new UserEmailWasChanged(
                 $userId,
                 $email
             )
