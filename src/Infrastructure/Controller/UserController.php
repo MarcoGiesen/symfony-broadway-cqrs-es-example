@@ -5,6 +5,8 @@ namespace App\Infrastructure\Controller;
 use App\Domain\CommandResolver;
 use App\Domain\User\Command\ChangeUserEmail;
 use App\Domain\User\Command\RegisterUser;
+use App\Domain\User\UserId;
+use App\Infrastructure\Broadway\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -14,11 +16,32 @@ class UserController
 {
     private $bus;
     private $resolver;
+    private $userRepository;
 
-    public function __construct(MessageBusInterface $bus, CommandResolver $resolver)
+    public function __construct(MessageBusInterface $bus, CommandResolver $resolver, UserRepository $userRepository)
     {
         $this->bus = $bus;
         $this->resolver = $resolver;
+        $this->userRepository = $userRepository;
+    }
+
+    /**
+     * @Route("/user/{id}", methods={"GET"}, name="user")
+     *
+     * @param string $id
+     * @return JsonResponse
+     * @throws \App\Domain\User\Exception\UserNotFoundException
+     */
+    public function getAction(string $id): JsonResponse
+    {
+        $userId = new UserId($id);
+
+        $user = $this->userRepository->get($userId);
+
+        return new JsonResponse([
+            'status' => 'success',
+            'data' => $user->toArray()
+        ]);
     }
 
     /**
@@ -26,7 +49,6 @@ class UserController
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws \ReflectionException
      */
     public function registerAction(Request $request): JsonResponse
     {
@@ -37,7 +59,6 @@ class UserController
 
         return new JsonResponse([
             'status' => 'success',
-            'message' => 'ok',
             'id' => (string)$registerUser->getUserId()
         ]);
     }
@@ -47,7 +68,6 @@ class UserController
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws \ReflectionException
      */
     public function changeEmailAction(Request $request): JsonResponse
     {

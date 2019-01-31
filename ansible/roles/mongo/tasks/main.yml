@@ -1,0 +1,11 @@
+---
+- name: spawn mongo container
+  docker_container:
+    name: mongo
+    image: mongo
+    restart_policy: "unless-stopped"
+    ports:
+      - "27017:27017"
+    env:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: geheim

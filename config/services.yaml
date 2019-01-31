@@ -32,17 +32,26 @@ services:
         resource: '../src/Infrastructure/Controller'
         tags: ['controller.service_arguments']
 
-
-
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    #App\Infrastructure\Broadway\Repository\:
-    #    resource: '../../src/Infrastructure/Broadway/Repository/*'
+    App\Infrastructure\Broadway\Projection\:
+        resource: '../src/Infrastructure/Broadway/Projection/*'
+        tags: ['broadway.domain.event_listener']
+
+    App\Infrastructure\Broadway\Repository\:
+        resource: '../src/Infrastructure/Broadway/Repository/*'
 
     App\Domain\:
         resource: '../src/Domain/**/Handler'
         tags: ['messenger.message_handler']
+
+    MongoDB\Client:
+        arguments: ['%env(MONGO_DATABASE_URL)%']
+
+    App\Infrastructure\MongoDb\MongoDbManager:
+        arguments:
+            $databaseName: '%env(MONGO_DATABASE_NAME)%'
 
     Broadway\EventStore\EventStore: '@broadway.event_store'
     Broadway\EventHandling\EventBus: '@broadway.event_handling.event_bus'

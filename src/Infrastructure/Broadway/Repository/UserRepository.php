@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mgiesen
- * Date: 23.11.18
- * Time: 13:43
- */
 
 namespace App\Infrastructure\Broadway\Repository;
 

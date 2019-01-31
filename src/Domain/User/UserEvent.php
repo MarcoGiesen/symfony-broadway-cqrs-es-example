@@ -13,7 +13,7 @@ abstract class UserEvent implements Serializable
         $this->userId = $userId;
     }
 
-    public function getUserId(): UserId
+    public function userId(): UserId
     {
         return $this->userId;
     }

@@ -2,7 +2,6 @@
 
 namespace App\Domain\User\Command;
 
-use App\Domain\CommandInterface;
 use App\Domain\User\CreateUserCommand;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,6 +19,10 @@ class RegisterUser extends CreateUserCommand
      *         "username" = {
      *             @Assert\NotBlank,
      *             @Assert\Length(min=3)
+     *         },
+     *         "password" = {
+     *             @Assert\NotBlank,
+     *             @Assert\Length(min=3)
      *         }
      *     }
      * )
@@ -32,13 +35,18 @@ class RegisterUser extends CreateUserCommand
         $this->payload = $payload;
     }
 
-    public function getUsername(): string
+    public function username(): string
     {
         return $this->payload['username'];
     }
 
-    public function getEmail(): string
+    public function email(): string
     {
         return $this->payload['email'];
+    }
+
+    public function password(): string
+    {
+        return $this->payload['password'];
     }
 }
