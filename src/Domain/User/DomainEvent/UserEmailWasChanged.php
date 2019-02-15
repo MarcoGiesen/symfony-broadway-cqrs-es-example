@@ -15,7 +15,7 @@ class UserEmailWasChanged extends UserEvent
         $this->email = $email;
     }
 
-    public function getEmail(): string
+    public function email(): string
     {
         return $this->email;
     }

@@ -1,0 +1,13 @@
+---
+- hosts: devbox
+  roles:
+    - role: mysql
+      become: true
+    - role: mongo
+      become: true
+    - role: nginx
+      become: true
+    - role: app
+      become: true
+    - role: tools
+      become: true

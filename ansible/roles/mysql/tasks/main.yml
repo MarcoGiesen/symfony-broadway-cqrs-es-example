@@ -1,0 +1,14 @@
+---
+- name: spawn mysql container
+  docker_container:
+    name: mysql
+    image: mysql/mysql-server:5.7.23
+    restart_policy: "unless-stopped"
+    ports:
+      - "3306:3306"
+    env:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: 'geheim'
+      MYSQL_DATABASE: 'event_store'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'geheim'
