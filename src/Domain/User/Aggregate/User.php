@@ -2,6 +2,10 @@
 
 namespace App\Domain\User\Aggregate;
 
+use App\Domain\ToDo\Aggregate\ToDo;
+use App\Domain\ToDo\DomainEvent\ToDoWasCreated;
+use App\Domain\ToDo\DomainEvent\ToDoWasMarkedAsDone;
+use App\Domain\ToDo\ToDoId;
 use App\Domain\User\DomainEvent\UserEmailWasChanged;
 use App\Domain\User\DomainEvent\UserPasswordWasChanged;
 use App\Domain\User\DomainEvent\UserPasswordWasChangedAnomaly;
@@ -15,6 +19,7 @@ class User extends EventSourcedAggregateRoot
     private $username;
     private $email;
     private $password;
+    private $toDos = [];
 
     /**
      * @return string
@@ -75,6 +80,28 @@ class User extends EventSourcedAggregateRoot
         );
     }
 
+    public function addToDo(ToDoId $toDoId, string $title, string $description): void
+    {
+        $this->apply(
+            new ToDoWasCreated(
+                new UserId($this->userId),
+                $toDoId,
+                $title,
+                $description
+            )
+        );
+    }
+
+    public function markToDoAsDone(ToDoId $toDoId): void
+    {
+        $this->toDos[(string)$toDoId]->markAsDone();
+    }
+
+    public function describeToDoInformation(ToDoId $toDoId, string $title, string $description): void
+    {
+        $this->toDos[(string)$toDoId]->describe(new UserId($this->userId), $title, $description);
+    }
+
     public function applyUserWasRegistered(UserWasRegistered $userWasRegistered): void
     {
         $this->userId = $userWasRegistered->userId();
@@ -91,5 +118,15 @@ class User extends EventSourcedAggregateRoot
     public function applyUserPasswordWasChanged(UserPasswordWasChanged $userPasswordWasChanged): void
     {
         $this->password = $userPasswordWasChanged->password();
+    }
+
+    public function applyToDoWasCreated(ToDoWasCreated $toDoWasCreated): void
+    {
+        $this->toDos[(string)$toDoWasCreated->toDoId()] = new ToDo(
+            $toDoWasCreated->toDoId(),
+            $toDoWasCreated->userId(),
+            $toDoWasCreated->title(),
+            $toDoWasCreated->description()
+        );
     }
 }
